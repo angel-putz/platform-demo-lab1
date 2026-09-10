@@ -1,0 +1,14 @@
+FROM nodeJS:18.16.0-alpine3.18
+
+WORKDIR /app
+
+COPY package.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+RUN npm test
+CMD ["npm", "test"]
