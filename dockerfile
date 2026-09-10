@@ -1,14 +1,20 @@
-FROM nodeJS:18.16.0-alpine3.18
+FROM node:18.16.0-alpine3.18
 
 WORKDIR /app
 
-COPY package.json ./
+# Copie le lockfile pour verrouiller les versions exactes
+COPY package*.json ./
 
-RUN npm install
+# Installation propre des dépendances
+RUN npm ci
 
+# Copie du reste du code source
 COPY . .
+
+# Exécution des tests pendant le build (échoue et annule le build si un test casse)
+RUN npm test
 
 EXPOSE 3000
 
-RUN npm test
-CMD ["npm", "test"]
+# Commande de démarrage de l'application
+CMD ["npm", "start"]
